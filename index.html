@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Нажимай и играй</title>
+
+<meta property="og:title"        content="👉 НАЖИМАЙ И ИГРАЙ! 🚀" />
+<meta property="og:description"  content="НАЖИМАЙ И ИГРАЙ" />
+<meta property="og:image"        content="https://yalica.github.io/uzimuzi-web-1/cover.png" />
+<meta property="og:image:width"  content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url"          content="https://yalica.github.io/uzimuzi-web/" />
+<meta property="og:type"         content="website" />
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:image"       content="https://yalica.github.io/uzimuzi-web/cover.png" />
+
+<style>
+    html, body {
+        margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+        background-color: #000000; user-select: none; -webkit-user-select: none;
+        -ms-user-select: none; -moz-user-select: none; font-family: sans-serif;
+        touch-action: none;
+    }
+
+    /* ===== РАМКА ТЕЛЕФОНА НА ПК ===== */
+    .phone-frame {
+        width: 100%; height: 100%; position: relative;
+        background-color: #000000;
+    }
+    @media (min-width: 600px) and (pointer: fine) {
+        body { display: flex; justify-content: center; align-items: center; background: #111; }
+        .phone-frame {
+            width: auto; height: 92vh; aspect-ratio: 9/16;
+            border: 12px solid #1a1a1a; border-radius: 40px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.8); overflow: hidden;
+        }
+    }
+
+    .swiper-container {
+        display: flex; width: 300%; height: 100%;
+        transition: transform 0.3s ease-out;
+    }
+    .page {
+        width: 33.3333%; height: 100%; display: flex;
+        justify-content: center; align-items: center;
+        background-color: #000000; position: relative;
+    }
+    .page img, .page video {
+        height: 100%; width: 100%; object-fit: contain;
+        display: block; pointer-events: none; -webkit-user-drag: none;
+    }
+
+    /* ===== ПЛАШКА "ЛИСТАЙ ВЛЕВО" (право-верх) ===== */
+    .hint-badge {
+        position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); color: #fff;
+        padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: bold;
+        text-transform: uppercase; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.4);
+        pointer-events: none; z-index: 5; animation: pulseBlink 2s infinite ease-in-out;
+    }
+    @keyframes pulseBlink {
+        0% { opacity: 0.3; transform: scale(0.95); }
+        50% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0.3; transform: scale(0.95); }
+    }
+
+    /* ===== ПЛАШКА ВПЕРЁД/СТОП (низ-центр) ===== */
+    .play-pause-badge {
+        position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+        background: rgba(255,215,0,0.9); color: #000;
+        padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: bold;
+        text-transform: uppercase; letter-spacing: 1px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        pointer-events: none; z-index: 5;
+    }
+</style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="phone-frame">
+        <div class="swiper-container" id="swiper">
+
+            <!-- ЭКРАН 1 — ROUNDED -->
+            <div class="page" id="page1">
+                <div class="hint-badge">Листай влево ➔</div>
+                <img id="img1" alt="Экран 1">
+            </div>
+
+            <!-- ЭКРАН 2 — RULES -->
+            <div class="page" id="page2">
+                <div class="hint-badge">Листай влево ➔</div>
+                <img id="img2" alt="Правила">
+            </div>
+
+            <!-- ЭКРАН 3 — ВИДЕО -->
+            <div class="page" id="page3">
+                <div class="play-pause-badge" id="ppBadge">🔘 ВПЕРЁД</div>
+                <video id="gameVideo" loop playsinline preload="auto"
+                       controlslist="nodownload nofullscreen noremoteplayback">
+                    <source id="videoSrc" type="video/mp4">
+                </video>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Замаскированные имена: rounded.png, rules.png, game.mp4
+        const _0x1a = ['cm91bmRlZC5wbmc=', 'cnVsZXMucG5n', 'Z2FtZS5tcDQ='];
+        const decode = (str) => atob(str);
+
+        const video = document.getElementById('gameVideo');
+        const swiper = document.getElementById('swiper');
+        const ppBadge = document.getElementById('ppBadge');
+        let currentPage = 0;
+
+        document.getElementById('img1').src = decode(_0x1a[0]);   // rounded.png
+        document.getElementById('img2').src = decode(_0x1a[1]);   // rules.png
+        document.getElementById('videoSrc').src = decode(_0x1a[2]); // game.mp4
+
+        window.addEventListener('load', () => { video.load(); });
+
+        function changePage(pageIndex) {
+            currentPage = pageIndex;
+            swiper.style.transform = `translateX(-${currentPage * 33.3333}%)`;
+            if (currentPage === 2) {
+                video.play().then(() => { ppBadge.textContent = '🔘 СТОП'; }).catch(() => {});
+            } else {
+                video.pause();
+                ppBadge.textContent = '🔘 ВПЕРЁД';
+            }
+        }
+
+        document.getElementById('page1').addEventListener('click', () => changePage(1));
+        document.getElementById('page2').addEventListener('click', () => changePage(2));
+        document.getElementById('page3').addEventListener('click', () => {
+            if (video.paused) {
+                video.play().then(() => { ppBadge.textContent = '🔘 СТОП'; }).catch(() => {});
+            } else {
+                video.pause();
+                ppBadge.textContent = '🔘 ВПЕРЁД';
+            }
+        });
+
+        // Свайп пальцем
+        let startX = 0;
+        document.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, {passive: true});
+        document.addEventListener('touchend', (e) => {
+            let diffX = startX - e.changedTouches[0].clientX;
+            if (diffX > 60 && currentPage < 2) changePage(currentPage + 1);
+            if (diffX < -60 && currentPage > 0) changePage(currentPage - 1);
+        });
+
+        // ===== ЗАЩИТА =====
+        document.addEventListener('keydown', function(e) {
+            if (
+                e.keyCode === 123 ||
+                (e.ctrlKey && e.shiftKey && [73,74,67].includes(e.keyCode)) ||
+                (e.ctrlKey && e.keyCode === 85) ||
+                (e.ctrlKey && e.keyCode === 83)
+            ) { e.preventDefault(); return false; }
+        });
+        window.addEventListener('contextmenu', (e) => e.preventDefault(), false);
+        document.addEventListener('dragstart', (e) => e.preventDefault(), false);
+    </script>
+
+</body>
+</html>
