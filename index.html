@@ -141,17 +141,27 @@
         font-weight: 600;
         border: 1px solid rgba(212, 175, 55, 0.7);
         border-radius: 24px;
-        padding: 10px 22px;
+        padding: 10px 20px;
         transition: all 0.25s ease;
         display: flex;
         align-items: center;
-        gap: 7px;
+        gap: 8px;
+    }
+    .brand-links a svg { width: 18px; height: 18px; display: block; }
+    .brand-links a .max-logo {
+        font-weight: 800;
+        font-family: Arial, sans-serif;
+        font-style: normal;
+        font-size: 15px;
+        letter-spacing: 0.5px;
     }
     .brand-links a:active,
     .brand-links a:hover {
         background: rgba(212, 175, 55, 0.95);
         color: #000;
     }
+    .brand-links a:active svg path,
+    .brand-links a:hover svg path { fill: #000; }
 </style>
 
 <!-- Yandex.Metrika counter -->
@@ -201,8 +211,15 @@
                     </div>
 
                     <div class="brand-links">
-                        <a href="https://t.me/yalica_arch" target="_blank" rel="noopener"> Telegram</a>
-                        <a href="https://max.ru/join/SHeDSkc09AkDRydwJrMw3pe-C46C1Za9g0erHNvG1Ys" target="_blank" rel="noopener"> MAX</a>
+                        <a href="https://t.me/yalica_arch" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="#d4af37" d="M23.91 3.79L20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.56-1.1.56l.39-5.56 10.12-9.14c.44-.39-.1-.61-.68-.22L6.32 13.4l-5.45-1.7c-1.18-.37-1.2-1.18.25-1.75l21.3-8.21c.99-.36 1.85.22 1.49 1.85z"/>
+                            </svg>
+                            Telegram
+                        </a>
+                        <a href="https://max.ru/join/SHeDSkc09AkDRydwJrMw3pe-C46C1Za9g0erHNvG1Ys" target="_blank" rel="noopener">
+                            <span class="max-logo">MAX</span>
+                        </a>
                     </div>
                 </div>
 
@@ -277,6 +294,16 @@
         video.addEventListener('ended', () => {
             ppBadge.textContent = '🔘 ВПЕРЁД';
             brandPlate.classList.add('show');
+        });
+
+        // === ВОЗВРАТ ИЗ КАНАЛА: не запускаем видео заново, оставляем плашку ===
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && currentPage === 2) {
+                // человек вернулся на вкладку — держим видео на паузе и показываем плашку с кнопками
+                video.pause();
+                ppBadge.textContent = '🔘 ВПЕРЁД';
+                brandPlate.classList.add('show');
+            }
         });
 
         shareBadge.addEventListener('click', async (e) => {
