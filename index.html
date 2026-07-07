@@ -89,19 +89,19 @@
     /* ===== ФИРМЕННАЯ ПЛАШКА YA.LI.CA. ===== */
     .brand-plate {
         position: absolute;
-        bottom: 90px;
+        bottom: 105px;
         left: 50%;
         transform: translateX(-50%) translateY(20px);
-        width: 88%;
-        max-width: 520px;
-        background: rgba(0, 0, 0, 0.55);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(212, 175, 55, 0.45);
-        border-radius: 16px;
-        padding: 16px 20px;
+        width: 92%;
+        max-width: 560px;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(212, 175, 55, 0.55);
+        border-radius: 18px;
+        padding: 22px 24px;
         z-index: 8;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.55);
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.8s ease, transform 0.8s ease;
@@ -115,8 +115,8 @@
     .brand-plate .brand-text {
         font-family: 'Playfair Display', 'Times New Roman', Georgia, serif;
         color: #f5f0e6;
-        font-size: 15px;
-        line-height: 1.5;
+        font-size: 18px;
+        line-height: 1.55;
         letter-spacing: 0.3px;
     }
     .brand-plate .brand-name {
@@ -124,27 +124,32 @@
         font-weight: 600;
         font-style: italic;
         letter-spacing: 1px;
+        font-size: 20px;
     }
     .brand-links {
-        margin-top: 12px;
+        margin-top: 18px;
         display: flex;
         justify-content: center;
-        gap: 14px;
+        gap: 12px;
         flex-wrap: wrap;
     }
     .brand-links a {
         font-family: 'Playfair Display', Georgia, serif;
         color: #d4af37;
         text-decoration: none;
-        font-size: 14px;
-        border: 1px solid rgba(212, 175, 55, 0.5);
-        border-radius: 20px;
-        padding: 6px 16px;
+        font-size: 16px;
+        font-weight: 600;
+        border: 1px solid rgba(212, 175, 55, 0.7);
+        border-radius: 24px;
+        padding: 10px 22px;
         transition: all 0.25s ease;
+        display: flex;
+        align-items: center;
+        gap: 7px;
     }
     .brand-links a:active,
     .brand-links a:hover {
-        background: rgba(212, 175, 55, 0.9);
+        background: rgba(212, 175, 55, 0.95);
         color: #000;
     }
 </style>
@@ -195,12 +200,10 @@
                         умный захват лидов и генерация прибыли.
                     </div>
 
-                    <!-- ССЫЛКИ ДОБАВИШЬ ПОТОМ СЮДА:
                     <div class="brand-links">
-                        <a href="https://t.me/твой_ник" target="_blank">Telegram</a>
-                        <a href="https://твой-сайт.ru" target="_blank">Сайт</a>
+                        <a href="https://t.me/yalica_arch" target="_blank" rel="noopener">✈️ Telegram</a>
+                        <a href="https://max.ru/join/SHeDSkc09AkDRydwJrMw3pe-C46C1Za9g0erHNvG1Ys" target="_blank" rel="noopener">💠 MAX</a>
                     </div>
-                    -->
                 </div>
 
                 <div class="play-pause-badge" id="ppBadge">🔘 ВПЕРЁД</div>
@@ -255,6 +258,11 @@
                 video.pause();
                 ppBadge.textContent = '🔘 ВПЕРЁД';
             }
+        });
+
+        // Клики по ссылкам в плашке НЕ переключают видео
+        document.querySelectorAll('.brand-links a').forEach(link => {
+            link.addEventListener('click', (e) => e.stopPropagation());
         });
 
         // Плашка появляется за 3 секунды до конца
