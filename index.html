@@ -86,72 +86,52 @@
     }
     .share-badge:active { transform: scale(0.95); }
 
-    /* ===== ФИРМЕННАЯ ПЛАШКА YA.LI.CA. ===== */
-    .brand-plate {
+    /* ===== КНОПКИ ССЫЛОК (СВЕРХУ ПО ЦЕНТРУ) ===== */
+    .brand-links {
         position: absolute;
-        bottom: 105px;
+        top: 70px;
         left: 50%;
-        transform: translateX(-50%) translateY(20px);
-        width: 92%;
-        max-width: 560px;
-        background: rgba(0, 0, 0, 0.65);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(212, 175, 55, 0.55);
-        border-radius: 18px;
-        padding: 22px 24px;
+        transform: translateX(-50%) translateY(-15px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
         z-index: 8;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.55);
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.8s ease, transform 0.8s ease;
-        text-align: center;
     }
-    .brand-plate.show {
+    .brand-links.show {
         opacity: 1;
         transform: translateX(-50%) translateY(0);
         pointer-events: auto;
-    }
-    .brand-plate .brand-text {
-        font-family: 'Playfair Display', 'Times New Roman', Georgia, serif;
-        color: #f5f0e6;
-        font-size: 18px;
-        line-height: 1.55;
-        letter-spacing: 0.3px;
-    }
-    .brand-plate .brand-name {
-        color: #d4af37;
-        font-weight: 600;
-        font-style: italic;
-        letter-spacing: 1px;
-        font-size: 20px;
-    }
-    .brand-links {
-        margin-top: 18px;
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        flex-wrap: wrap;
     }
     .brand-links a {
         font-family: 'Playfair Display', Georgia, serif;
         color: #d4af37;
         text-decoration: none;
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(212, 175, 55, 0.7);
-        border-radius: 24px;
-        padding: 10px 20px;
+        border-radius: 26px;
+        padding: 11px 24px;
         transition: all 0.25s ease;
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        gap: 9px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+        white-space: nowrap;
     }
     .brand-links a svg { width: 18px; height: 18px; display: block; }
     .brand-links a .max-logo {
         font-weight: 800;
         font-family: Arial, sans-serif;
-        font-style: normal;
         font-size: 15px;
         letter-spacing: 0.5px;
     }
@@ -162,6 +142,8 @@
     }
     .brand-links a:active svg path,
     .brand-links a:hover svg path { fill: #000; }
+    .brand-links a:active .max-logo,
+    .brand-links a:hover .max-logo { color: #000; }
 </style>
 
 <!-- Yandex.Metrika counter -->
@@ -201,26 +183,18 @@
             <div class="page" id="page3">
                 <div class="share-badge" id="shareBadge"> Поделиться</div>
 
-                <!-- ===== ФИРМЕННАЯ ПЛАШКА ===== -->
-                <div class="brand-plate" id="brandPlate">
-                    <div class="brand-text">
-                        Разработано на базе маркетинговой архитектуры
-                        <span class="brand-name">YA.LI.CA.</span>
-                        (Yield. Leads. Catch.):<br>
-                        умный захват лидов и генерация прибыли.
-                    </div>
-
-                    <div class="brand-links">
-                        <a href="https://t.me/yalica_arch" target="_blank" rel="noopener">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path fill="#d4af37" d="M23.91 3.79L20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.56-1.1.56l.39-5.56 10.12-9.14c.44-.39-.1-.61-.68-.22L6.32 13.4l-5.45-1.7c-1.18-.37-1.2-1.18.25-1.75l21.3-8.21c.99-.36 1.85.22 1.49 1.85z"/>
-                            </svg>
-                            Telegram
-                        </a>
-                        <a href="https://max.ru/join/SHeDSkc09AkDRydwJrMw3pe-C46C1Za9g0erHNvG1Ys" target="_blank" rel="noopener">
-                            <span class="max-logo">MAX</span>
-                        </a>
-                    </div>
+                <!-- ===== КНОПКИ ССЫЛОК ===== -->
+                <div class="brand-links" id="brandLinks">
+                    <a href="https://t.me/yalica_arch" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#d4af37" d="M23.91 3.79L20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.56-1.1.56l.39-5.56 10.12-9.14c.44-.39-.1-.61-.68-.22L6.32 13.4l-5.45-1.7c-1.18-.37-1.2-1.18.25-1.75l21.3-8.21c.99-.36 1.85.22 1.49 1.85z"/>
+                        </svg>
+                        Узнать больше в Telegram
+                    </a>
+                    <a href="https://max.ru/join/SHeDSkc09AkDRydwJrMw3pe-C46C1Za9g0erHNvG1Ys" target="_blank" rel="noopener">
+                        <span class="max-logo">MAX</span>
+                        Узнать больше в МАХ
+                    </a>
                 </div>
 
                 <div class="play-pause-badge" id="ppBadge">🔘 ВПЕРЁД</div>
@@ -241,7 +215,7 @@
         const swiper = document.getElementById('swiper');
         const ppBadge = document.getElementById('ppBadge');
         const shareBadge = document.getElementById('shareBadge');
-        const brandPlate = document.getElementById('brandPlate');
+        const brandLinks = document.getElementById('brandLinks');
         let currentPage = 0;
 
         document.getElementById('img1').src = decode(_0x1a[0]);
@@ -258,7 +232,7 @@
             } else {
                 video.pause();
                 ppBadge.textContent = '🔘 ВПЕРЁД';
-                brandPlate.classList.remove('show');
+                brandLinks.classList.remove('show');
             }
         }
 
@@ -268,7 +242,7 @@
             if (video.paused) {
                 if (video.ended || video.currentTime >= video.duration - 0.1) {
                     video.currentTime = 0;
-                    brandPlate.classList.remove('show');
+                    brandLinks.classList.remove('show');
                 }
                 video.play().then(() => { ppBadge.textContent = '🔘 СТОП'; }).catch(() => {});
             } else {
@@ -277,32 +251,31 @@
             }
         });
 
-        // Клики по ссылкам в плашке НЕ переключают видео
+        // Клики по ссылкам НЕ переключают видео
         document.querySelectorAll('.brand-links a').forEach(link => {
             link.addEventListener('click', (e) => e.stopPropagation());
         });
 
-        // Плашка появляется за 3 секунды до конца
+        // Кнопки появляются за 3 секунды до конца
         video.addEventListener('timeupdate', () => {
             if (!video.duration) return;
             const timeLeft = video.duration - video.currentTime;
             if (timeLeft <= 3 && timeLeft > 0) {
-                brandPlate.classList.add('show');
+                brandLinks.classList.add('show');
             }
         });
 
         video.addEventListener('ended', () => {
             ppBadge.textContent = '🔘 ВПЕРЁД';
-            brandPlate.classList.add('show');
+            brandLinks.classList.add('show');
         });
 
-        // === ВОЗВРАТ ИЗ КАНАЛА: не запускаем видео заново, оставляем плашку ===
+        // === ВОЗВРАТ ИЗ КАНАЛА: не запускаем видео заново, оставляем кнопки ===
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && currentPage === 2) {
-                // человек вернулся на вкладку — держим видео на паузе и показываем плашку с кнопками
                 video.pause();
                 ppBadge.textContent = '🔘 ВПЕРЁД';
-                brandPlate.classList.add('show');
+                brandLinks.classList.add('show');
             }
         });
 
