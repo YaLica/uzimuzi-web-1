@@ -6,7 +6,7 @@
 <title>Нажимай и играй</title>
 
 <meta property="og:title"        content="👉 НАЖИМАЙ И ИГРАЙ! 🚀" />
-<meta property="og:description"  content="Весёлая игра для всей семьи" />
+<meta property="og:description"  content="----Детская игра для всей семьи---" />
 <meta property="og:image"        content="https://yalica.github.io/uzimuzi-web-1/cover.png" />
 <meta property="og:image:width"  content="1200" />
 <meta property="og:image:height" content="630" />
@@ -89,7 +89,7 @@
     /* ===== КНОПКИ ССЫЛОК (СВЕРХУ ПО ЦЕНТРУ) ===== */
     .brand-links {
         position: absolute;
-        top: 70px;
+        top: 60px;
         left: 50%;
         transform: translateX(-50%) translateY(-15px);
         display: flex;
@@ -144,6 +144,27 @@
     .brand-links a:hover svg path { fill: #000; }
     .brand-links a:active .max-logo,
     .brand-links a:hover .max-logo { color: #000; }
+
+    /* ===== ВЕРТИКАЛЬНЫЙ ПРОГРЕСС-БАР ===== */
+    .progress-vertical {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 6px;
+        height: 100%;
+        background: rgba(255,255,255,0.15);
+        z-index: 9;
+        pointer-events: none;
+    }
+    .progress-vertical-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 0%;
+        background: #d4af37;
+        box-shadow: 0 0 8px rgba(212,175,55,0.8);
+    }
 </style>
 
 <!-- Yandex.Metrika counter -->
@@ -183,6 +204,11 @@
             <div class="page" id="page3">
                 <div class="share-badge" id="shareBadge"> Поделиться</div>
 
+                <!-- ===== ВЕРТИКАЛЬНЫЙ ПРОГРЕСС-БАР ===== -->
+                <div class="progress-vertical">
+                    <div class="progress-vertical-fill" id="progressFill"></div>
+                </div>
+
                 <!-- ===== КНОПКИ ССЫЛОК ===== -->
                 <div class="brand-links" id="brandLinks">
                     <a href="https://t.me/yalica_arch" target="_blank" rel="noopener">
@@ -197,7 +223,7 @@
                     </a>
                 </div>
 
-                <div class="play-pause-badge" id="ppBadge">🔘 ВПЕРЁД</div>
+                <div class="play-pause-badge" id="ppBadge"> ВПЕРЁД</div>
                 <video id="gameVideo" playsinline preload="auto"
                        controlslist="nodownload nofullscreen noremoteplayback">
                     <source id="videoSrc" type="video/mp4">
@@ -216,6 +242,7 @@
         const ppBadge = document.getElementById('ppBadge');
         const shareBadge = document.getElementById('shareBadge');
         const brandLinks = document.getElementById('brandLinks');
+        const progressFill = document.getElementById('progressFill');
         let currentPage = 0;
 
         document.getElementById('img1').src = decode(_0x1a[0]);
@@ -228,10 +255,10 @@
             currentPage = pageIndex;
             swiper.style.transform = `translateX(-${currentPage * 33.3333}%)`;
             if (currentPage === 2) {
-                video.play().then(() => { ppBadge.textContent = '🔘 СТОП'; }).catch(() => {});
+                video.play().then(() => { ppBadge.textContent = ' СТОП'; }).catch(() => {});
             } else {
                 video.pause();
-                ppBadge.textContent = '🔘 ВПЕРЁД';
+                ppBadge.textContent = ' ВПЕРЁД';
                 brandLinks.classList.remove('show');
             }
         }
@@ -244,10 +271,10 @@
                     video.currentTime = 0;
                     brandLinks.classList.remove('show');
                 }
-                video.play().then(() => { ppBadge.textContent = '🔘 СТОП'; }).catch(() => {});
+                video.play().then(() => { ppBadge.textContent = ' СТОП'; }).catch(() => {});
             } else {
                 video.pause();
-                ppBadge.textContent = '🔘 ВПЕРЁД';
+                ppBadge.textContent = ' ВПЕРЁД';
             }
         });
 
@@ -256,9 +283,14 @@
             link.addEventListener('click', (e) => e.stopPropagation());
         });
 
-        // Кнопки появляются за 3 секунды до конца
+        // Прогресс-бар + кнопки появляются за 3 секунды до конца
         video.addEventListener('timeupdate', () => {
             if (!video.duration) return;
+
+            // Прогресс-бар на 78 секунд (1:18), опускается сверху вниз
+            const percent = Math.min((video.currentTime / 78) * 100, 100);
+            progressFill.style.height = percent + '%';
+
             const timeLeft = video.duration - video.currentTime;
             if (timeLeft <= 3 && timeLeft > 0) {
                 brandLinks.classList.add('show');
@@ -266,15 +298,16 @@
         });
 
         video.addEventListener('ended', () => {
-            ppBadge.textContent = '🔘 ВПЕРЁД';
+            ppBadge.textContent = ' ВПЕРЁД';
             brandLinks.classList.add('show');
+            progressFill.style.height = '100%';
         });
 
         // === ВОЗВРАТ ИЗ КАНАЛА: не запускаем видео заново, оставляем кнопки ===
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && currentPage === 2) {
                 video.pause();
-                ppBadge.textContent = '🔘 ВПЕРЁД';
+                ppBadge.textContent = ' ВПЕРЁД';
                 brandLinks.classList.add('show');
             }
         });
