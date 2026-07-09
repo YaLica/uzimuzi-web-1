@@ -54,16 +54,19 @@
         display: block; pointer-events: none; -webkit-user-drag: none;
     }
 
+    /* ===== ПЛАШКА-ПОДСКАЗКА (КЛИКАБЕЛЬНАЯ) ===== */
     .hint-badge {
         position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.7); color: #fff;
         padding: 8px 14px; border-radius: 20px; font-size: 14px; font-weight: bold;
         text-transform: uppercase; letter-spacing: 1px; border: 1px solid rgba(255,255,255,0.4);
-        pointer-events: none; z-index: 5; animation: pulseBlink 2s infinite ease-in-out;
+        z-index: 6; cursor: pointer;
+        animation: pulseBlink 2s infinite ease-in-out;
     }
+    .hint-badge:active { transform: scale(0.92); }
     @keyframes pulseBlink {
-        0% { opacity: 0.3; transform: scale(0.95); }
+        0% { opacity: 0.35; transform: scale(0.95); }
         50% { opacity: 1; transform: scale(1); }
-        100% { opacity: 0.3; transform: scale(0.95); }
+        100% { opacity: 0.35; transform: scale(0.95); }
     }
 
     .play-pause-badge {
@@ -86,85 +89,111 @@
     }
     .share-badge:active { transform: scale(0.95); }
 
-    /* ===== КНОПКИ ССЫЛОК (СВЕРХУ ПО ЦЕНТРУ) ===== */
-    .brand-links {
+    /* ===== ФОН ЭКРАНА ПРАВИЛ ===== */
+    .rules-bg {
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 100%;
+        object-fit: cover;
+        z-index: 0;
+        pointer-events: none; -webkit-user-drag: none;
+    }
+
+    /* ===== КОНТЕЙНЕР ПЛАШЕК ===== */
+    .rules-panels {
         position: absolute;
-        top: 60px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-15px);
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        box-sizing: border-box;
+        padding: 70px 18px 30px;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        z-index: 8;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.8s ease, transform 0.8s ease;
+        gap: 10px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        z-index: 4;
+        touch-action: pan-y;
     }
-    .brand-links.show {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-        pointer-events: auto;
+    .rules-panels::-webkit-scrollbar { width: 0; background: transparent; }
+
+    /* ===== ОДНА ПЛАШКА ===== */
+    .rule-item {
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        border: 1px solid rgba(212, 175, 55, 0.65);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: background 0.25s ease;
+        flex-shrink: 0;
     }
-    .brand-links a {
-        font-family: 'Playfair Display', Georgia, serif;
-        color: #d4af37;
-        text-decoration: none;
-        font-size: 15px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        background: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(212, 175, 55, 0.7);
-        border-radius: 26px;
-        padding: 11px 24px;
-        transition: all 0.25s ease;
+    .rule-item.open {
+        background: rgba(0, 0, 0, 0.85);
+        border-color: rgba(212, 175, 55, 1);
+    }
+    .rule-head {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 9px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.4);
-        white-space: nowrap;
+        justify-content: space-between;
+        padding: 14px 16px;
+        cursor: pointer;
+        color: #d4af37;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+    .rule-arrow {
+        font-size: 14px;
+        transition: transform 0.3s ease;
+        color: #d4af37;
+        margin-left: 10px;
+    }
+    .rule-item.open .rule-arrow { transform: rotate(180deg); }
+
+    .rule-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.35s ease, padding 0.35s ease;
+        padding: 0 16px;
+        color: #fff;
+        font-family: sans-serif;
+        font-size: 15.5px;
+        line-height: 1.55;
+    }
+    .rule-item.open .rule-body {
+        max-height: 500px;
+        padding: 0 16px 16px;
+    }
+
+    /* ===== КНОПКИ ССЫЛОК ===== */
+    .brand-links {
+        position: absolute; top: 60px; left: 50%;
+        transform: translateX(-50%) translateY(-15px);
+        display: flex; flex-direction: column; align-items: center;
+        gap: 12px; z-index: 8; opacity: 0; pointer-events: none;
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .brand-links.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+    .brand-links a {
+        font-family: 'Playfair Display', Georgia, serif; color: #d4af37;
+        text-decoration: none; font-size: 15px; font-weight: 600;
+        text-transform: uppercase; letter-spacing: 0.5px;
+        background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(212, 175, 55, 0.7);
+        border-radius: 26px; padding: 11px 24px; transition: all 0.25s ease;
+        display: flex; align-items: center; justify-content: center; gap: 9px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.4); white-space: nowrap;
     }
     .brand-links a svg { width: 18px; height: 18px; display: block; }
-    .brand-links a .max-logo {
-        font-weight: 800;
-        font-family: Arial, sans-serif;
-        font-size: 15px;
-        letter-spacing: 0.5px;
-    }
-    .brand-links a:active,
-    .brand-links a:hover {
-        background: rgba(212, 175, 55, 0.95);
-        color: #000;
-    }
-    .brand-links a:active svg path,
-    .brand-links a:hover svg path { fill: #000; }
-    .brand-links a:active .max-logo,
-    .brand-links a:hover .max-logo { color: #000; }
+    .brand-links a .max-logo { font-weight: 800; font-family: Arial, sans-serif; font-size: 15px; letter-spacing: 0.5px; }
+    .brand-links a:active, .brand-links a:hover { background: rgba(212, 175, 55, 0.95); color: #000; }
+    .brand-links a:active svg path, .brand-links a:hover svg path { fill: #000; }
+    .brand-links a:active .max-logo, .brand-links a:hover .max-logo { color: #000; }
 
     /* ===== ВЕРТИКАЛЬНЫЙ ПРОГРЕСС-БАР ===== */
-    .progress-vertical {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 6px;
-        height: 100%;
-        background: rgba(255,255,255,0.15);
-        z-index: 9;
-        pointer-events: none;
-    }
-    .progress-vertical-fill {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 0%;
-        background: #d4af37;
-        box-shadow: 0 0 8px rgba(212,175,55,0.8);
-    }
+    .progress-vertical { position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: rgba(255,255,255,0.15); z-index: 9; pointer-events: none; }
+    .progress-vertical-fill { position: absolute; top: 0; left: 0; width: 100%; height: 0%; background: #d4af37; box-shadow: 0 0 8px rgba(212,175,55,0.8); }
 </style>
 
 <!-- Yandex.Metrika counter -->
@@ -192,24 +221,62 @@
         <div class="swiper-container" id="swiper">
 
             <div class="page" id="page1">
-                <div class="hint-badge">Листай влево ➔</div>
+                <div class="hint-badge" data-nav="1">Листай влево ➔</div>
                 <img id="img1" alt="Экран 1">
             </div>
 
+            <!-- ===== ЭКРАН ПРАВИЛ С ПЛАШКАМИ ===== -->
             <div class="page" id="page2">
-                <div class="hint-badge">Листай влево ➔</div>
-                <img id="img2" alt="Правила">
+                <img id="img2" class="rules-bg" alt="Правила">
+                <div class="hint-badge" data-nav="2">Листай влево ➔</div>
+
+                <div class="rules-panels" id="rulesPanels">
+
+                    <div class="rule-item">
+                        <div class="rule-head">🎲 Как играть <span class="rule-arrow">▼</span></div>
+                        <div class="rule-body">Включай видео на полную громкость, зови родителей или друзей (которые умеют читать) и приготовь свои пальчики! Эта игра проверит твою скорость и сообразительность.</div>
+                    </div>
+
+                    <div class="rule-item">
+                        <div class="rule-head">📜 Правила игры <span class="rule-arrow">▼</span></div>
+                        <div class="rule-body">Смотри на экран. В верхней части видео будет появляться вопрос. На каждый вопрос у тебя есть всего 4 секунды!</div>
+                    </div>
+
+                    <div class="rule-item">
+                        <div class="rule-head">⏸️ Жми на ПАУЗУ <span class="rule-arrow">▼</span></div>
+                        <div class="rule-body">Внизу экрана с бешеной скоростью мелькают буквы. Твоя задача — в любой момент кликнуть по экрану и остановить видео.</div>
+                    </div>
+
+                    <div class="rule-item">
+                        <div class="rule-head">💬 Назови слово <span class="rule-arrow">▼</span></div>
+                        <div class="rule-body">Посмотри, на какой букве остановился алфавит. Быстро назови слово или словосочетание-ответ на эту букву, которое подходит к вопросу сверху.</div>
+                    </div>
+
+                    <div class="rule-item">
+                        <div class="rule-head">🤫 Секрет игры <span class="rule-arrow">▼</span></div>
+                        <div class="rule-body">Иногда, если вдруг не можешь вспомнить подходящее слово, можно придумать своё собственное, но помни: это можно сделать только 2 раза за всю игру.</div>
+                    </div>
+
+                    <div class="rule-item">
+                        <div class="rule-head">▶️ Играй дальше <span class="rule-arrow">▼</span></div>
+                        <div class="rule-body">Снимай с паузы и играй дальше! Впереди целых 18 непростых вопросов.</div>
+                    </div>
+
+                    <div class="rule-item">
+                        <div class="rule-head">🏆 Кто победил <span class="rule-arrow">▼</span></div>
+                        <div class="rule-body">Кто первый из игроков выкрикнул правильное слово после нажатия на паузу, тот и забирает балл. (В качестве баллов можно использовать конфетки, счётные палочки или любые предметы, которые будет легко посчитать после окончания игры, или просто зажимай пальчики). ;)</div>
+                    </div>
+
+                </div>
             </div>
 
             <div class="page" id="page3">
                 <div class="share-badge" id="shareBadge"> Поделиться</div>
 
-                <!-- ===== ВЕРТИКАЛЬНЫЙ ПРОГРЕСС-БАР ===== -->
                 <div class="progress-vertical">
                     <div class="progress-vertical-fill" id="progressFill"></div>
                 </div>
 
-                <!-- ===== КНОПКИ ССЫЛОК ===== -->
                 <div class="brand-links" id="brandLinks">
                     <a href="https://t.me/yalica_arch" target="_blank" rel="noopener">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -243,6 +310,7 @@
         const shareBadge = document.getElementById('shareBadge');
         const brandLinks = document.getElementById('brandLinks');
         const progressFill = document.getElementById('progressFill');
+        const rulesPanels = document.getElementById('rulesPanels');
         let currentPage = 0;
 
         document.getElementById('img1').src = decode(_0x1a[0]);
@@ -263,9 +331,30 @@
             }
         }
 
+        // === КЛИК ПО МИГАЮЩЕЙ ПЛАШКЕ "Листай влево" -> следующая страница ===
+        document.querySelectorAll('.hint-badge').forEach(badge => {
+            badge.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentPage < 2) changePage(currentPage + 1);
+            });
+        });
+
+        // Клик по фону 1-го экрана тоже переключает
         document.getElementById('page1').addEventListener('click', () => changePage(1));
-        document.getElementById('page2').addEventListener('click', () => changePage(2));
-        document.getElementById('page3').addEventListener('click', () => {
+
+        // === ЛОГИКА ПЛАШЕК-АККОРДЕОНОВ ===
+        document.querySelectorAll('#rulesPanels .rule-item').forEach(item => {
+            item.querySelector('.rule-head').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = item.classList.contains('open');
+                document.querySelectorAll('#rulesPanels .rule-item').forEach(i => i.classList.remove('open'));
+                if (!isOpen) item.classList.add('open');
+            });
+        });
+
+        // === ПАУЗА/ПЛЕЙ на видео ===
+        document.getElementById('page3').addEventListener('click', (e) => {
+            if (e.target.closest('.share-badge') || e.target.closest('.brand-links')) return;
             if (video.paused) {
                 if (video.ended || video.currentTime >= video.duration - 0.1) {
                     video.currentTime = 0;
@@ -278,19 +367,14 @@
             }
         });
 
-        // Клики по ссылкам НЕ переключают видео
         document.querySelectorAll('.brand-links a').forEach(link => {
             link.addEventListener('click', (e) => e.stopPropagation());
         });
 
-        // Прогресс-бар + кнопки появляются за 3 секунды до конца
         video.addEventListener('timeupdate', () => {
             if (!video.duration) return;
-
-            // Прогресс-бар на 78 секунд (1:18), опускается сверху вниз
             const percent = Math.min((video.currentTime / 78) * 100, 100);
             progressFill.style.height = percent + '%';
-
             const timeLeft = video.duration - video.currentTime;
             if (timeLeft <= 3 && timeLeft > 0) {
                 brandLinks.classList.add('show');
@@ -303,7 +387,6 @@
             progressFill.style.height = '100%';
         });
 
-        // === ВОЗВРАТ ИЗ КАНАЛА: не запускаем видео заново, оставляем кнопки ===
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && currentPage === 2) {
                 video.pause();
@@ -320,23 +403,54 @@
                 url: 'https://yalica.github.io/uzimuzi-web-1/'
             };
             try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                } else {
-                    await navigator.clipboard.writeText(shareData.url);
-                    alert('Ссылка скопирована! 📋');
-                }
+                if (navigator.share) { await navigator.share(shareData); }
+                else { await navigator.clipboard.writeText(shareData.url); alert('Ссылка скопирована! 📋'); }
             } catch (err) {}
         });
 
-        let startX = 0;
-        document.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, {passive: true});
-        document.addEventListener('touchend', (e) => {
-            let diffX = startX - e.changedTouches[0].clientX;
-            if (diffX > 60 && currentPage < 2) changePage(currentPage + 1);
-            if (diffX < -60 && currentPage > 0) changePage(currentPage - 1);
-        });
+        // ==========================================================
+        // === СВАЙП (палец + мышь) ==================================
+        // ==========================================================
+        let startX = 0, startY = 0, curX = 0, curY = 0, tracking = false, moved = false;
 
+        function swipeStart(x, y) {
+            startX = curX = x;
+            startY = curY = y;
+            tracking = true;
+            moved = false;
+        }
+        function swipeMove(x, y) {
+            if (!tracking) return;
+            curX = x; curY = y;
+            if (Math.abs(curX - startX) > 8 || Math.abs(curY - startY) > 8) moved = true;
+        }
+        function swipeEnd() {
+            if (!tracking) return;
+            tracking = false;
+            let diffX = startX - curX;
+            let diffY = startY - curY;
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+                if (diffX > 0 && currentPage < 2) changePage(currentPage + 1);
+                if (diffX < 0 && currentPage > 0) changePage(currentPage - 1);
+            }
+        }
+
+        // --- Касания (телефон/планшет) ---
+        function tStart(e){ swipeStart(e.touches[0].clientX, e.touches[0].clientY); }
+        function tMove(e){ swipeMove(e.touches[0].clientX, e.touches[0].clientY); }
+        document.addEventListener('touchstart', tStart, {passive:true});
+        document.addEventListener('touchmove', tMove, {passive:true});
+        document.addEventListener('touchend', swipeEnd, {passive:true});
+        rulesPanels.addEventListener('touchstart', tStart, {passive:true});
+        rulesPanels.addEventListener('touchmove', tMove, {passive:true});
+        rulesPanels.addEventListener('touchend', swipeEnd, {passive:true});
+
+                // --- Мышь (компьютер) ---
+        document.addEventListener('mousedown', (e)=> swipeStart(e.clientX, e.clientY));
+        document.addEventListener('mousemove', (e)=> swipeMove(e.clientX, e.clientY));
+        document.addEventListener('mouseup', swipeEnd);
+
+        // === ЗАЩИТА ОТ КОПИРОВАНИЯ / КОНТЕКСТНОГО МЕНЮ ===
         document.addEventListener('keydown', function(e) {
             if (
                 e.keyCode === 123 ||
