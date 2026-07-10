@@ -116,20 +116,20 @@
     }
     .rules-panels::-webkit-scrollbar { width: 0; background: transparent; }
 
-    /* ===== ОДНА ПЛАШКА ===== */
+       /* ===== ОДНА ПЛАШКА ===== */
     .rule-item {
-        background: rgba(0, 0, 0, 0.72);
+        background: rgba(250, 50, 96, 1);
         backdrop-filter: blur(6px);
         -webkit-backdrop-filter: blur(6px);
-        border: 1px solid rgba(212, 175, 55, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.6);
         border-radius: 16px;
         overflow: hidden;
         transition: background 0.25s ease;
         flex-shrink: 0;
     }
     .rule-item.open {
-        background: rgba(0, 0, 0, 0.85);
-        border-color: rgba(212, 175, 55, 1);
+        background: rgba(250, 50, 96, 0.85);
+        border-color: rgba(255, 255, 255, 1);
     }
     .rule-head {
         display: flex;
@@ -137,7 +137,7 @@
         justify-content: space-between;
         padding: 14px 16px;
         cursor: pointer;
-        color: #d4af37;
+        color: #ffffff;
         font-family: 'Playfair Display', Georgia, serif;
         font-size: 16px;
         font-weight: 600;
@@ -146,9 +146,10 @@
     .rule-arrow {
         font-size: 14px;
         transition: transform 0.3s ease;
-        color: #d4af37;
+        color: #ffffff;
         margin-left: 10px;
     }
+    
     .rule-item.open .rule-arrow { transform: rotate(180deg); }
 
     .rule-body {
@@ -264,7 +265,7 @@
 
                     <div class="rule-item">
                         <div class="rule-head">🏆 Кто победил <span class="rule-arrow">▼</span></div>
-                        <div class="rule-body">Кто первый из игроков выкрикнул правильное слово после нажатия на паузу, тот и забирает балл. (В качестве баллов можно использовать конфетки, счётные палочки или любые предметы, которые будет легко посчитать после окончания игры, или просто зажимай пальчики). ;)</div>
+                        <div class="rule-body">Кто первый из игроков выкрикнул правильное слово после нажатия на паузу, тот и забирает балл. (В качестве баллов можно использовать конфетки, счётные палочки или любые предметы, которые будет легко посчитать после окончания игры, или просто зажимай пальчики). </div>
                     </div>
 
                 </div>
