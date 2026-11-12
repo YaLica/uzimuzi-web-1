@@ -167,30 +167,29 @@
         padding: 0 16px 16px;
     }
 
-    /* ===== КНОПКИ ССЫЛОК ===== */
+    /* ===== КНОПКИ КАНАЛОВ НА ФИНАЛЬНОМ КАДРЕ ===== */
     .brand-links {
-        position: absolute; top: 55px; left: 50%;
-        transform: translateX(-50%) translateY(-15px);
+        position: absolute; bottom: 82px; left: 50%;
+        transform: translateX(-50%);
         display: flex; flex-direction: column; align-items: center;
-        gap: 12px; z-index: 8; opacity: 0; pointer-events: none;
-        transition: opacity 0.8s ease, transform 0.8s ease;
+        gap: 12px; z-index: 8; opacity: 0; visibility: hidden; pointer-events: none;
+        width: min(86%, 420px);
     }
-    .brand-links.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+    .brand-links.show { opacity: 1; visibility: visible; pointer-events: auto; }
+    .brand-channel-buttons { display: flex; justify-content: center; gap: 9px; }
     .brand-links a {
-        font-family: 'Playfair Display', Georgia, serif; color: #d4af37;
-        text-decoration: none; font-size: 15px; font-weight: 600;
-        text-transform: uppercase; letter-spacing: 0.5px;
-        background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px); border: 1px solid rgba(212, 175, 55, 0.7);
-        border-radius: 26px; padding: 11px 24px; transition: all 0.25s ease;
-        display: flex; align-items: center; justify-content: center; gap: 9px;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.4); white-space: nowrap;
+        display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+        box-sizing: border-box; min-height: 44px; padding: 10px 16px;
+        border: 1px solid #cdd7c6; border-radius: 12px;
+        color: #293d35; font: 14px Arial, sans-serif; text-decoration: none;
+        white-space: nowrap; touch-action: manipulation;
+        transition: background .15s, border-color .15s;
     }
-    .brand-links a svg { width: 18px; height: 18px; display: block; }
-    .brand-links a .max-logo { font-weight: 800; font-family: Arial, sans-serif; font-size: 15px; letter-spacing: 0.5px; }
-    .brand-links a:active, .brand-links a:hover { background: rgba(212, 175, 55, 0.95); color: #000; }
-    .brand-links a:active svg path, .brand-links a:hover svg path { fill: #000; }
-    .brand-links a:active .max-logo, .brand-links a:hover .max-logo { color: #000; }
+    .brand-links .channel-max { background: #eae5f2; border-color: #d9d0e6; }
+    .brand-links .channel-telegram { background: #e0edf2; border-color: #c9dde5; }
+    .brand-links a:hover { border-color: #879586; background: #fdfbf6; }
+    .brand-links a:focus-visible { outline: 3px solid #3b624b; outline-offset: 3px; }
+    .brand-author { font: 14px Georgia, 'Times New Roman', serif; color: #293d35; text-align: center; }
 
     /* ===== ВЕРТИКАЛЬНЫЙ ПРОГРЕСС-БАР ===== */
     .progress-vertical { position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: rgba(255,255,255,0.15); z-index: 9; pointer-events: none; }
@@ -278,17 +277,12 @@
                     <div class="progress-vertical-fill" id="progressFill"></div>
                 </div>
 
-                <div class="brand-links" id="brandLinks">
-                    <a href="https://t.me/yalica_arch" target="_blank" rel="noopener">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="#d4af37" d="M23.91 3.79L20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.56-1.1.56l.39-5.56 10.12-9.14c.44-.39-.1-.61-.68-.22L6.32 13.4l-5.45-1.7c-1.18-.37-1.2-1.18.25-1.75l21.3-8.21c.99-.36 1.85.22 1.49 1.85z"/>
-                        </svg>
-                        Узнать больше в Telegram
-                    </a>
-                    <a href="https://max.ru/join/SHeDSkc09AkDRydwJrMw3pe-C46C1Za9g0erHNvG1Ys" target="_blank" rel="noopener">
-                        <span class="max-logo">MAX</span>
-                        Узнать больше в МАХ
-                    </a>
+                <div class="brand-links" id="brandLinks" aria-hidden="true">
+                    <nav class="brand-channel-buttons" aria-label="Каналы Скоро в школу">
+                        <a class="channel-telegram" href="https://t.me/skorouzheshkola" target="_blank" rel="noopener noreferrer">Telegram <span aria-hidden="true">↗</span></a>
+                        <a class="channel-max" href="https://max.ru/channel_scorovshcolu" target="_blank" rel="noopener noreferrer">МАХ <span aria-hidden="true">↗</span></a>
+                    </nav>
+                    <div class="brand-author">Автор Лисица Яна</div>
                 </div>
 
                 <div class="play-pause-badge" id="ppBadge"> ВПЕРЁД</div>
@@ -314,6 +308,23 @@
         const rulesPanels = document.getElementById('rulesPanels');
         let currentPage = 0;
 
+        // Только положение и видимость ссылок; видео воспроизводится как прежде.
+        function updateBrandLinks() {
+            const page = document.getElementById('page3');
+            const ratio = video.videoWidth && video.videoHeight ? video.videoWidth / video.videoHeight : 9 / 16;
+            const frameHeight = Math.min(page.clientHeight, page.clientWidth / ratio);
+            const bottomInset = (page.clientHeight - frameHeight) / 2;
+            // Над существующей плашкой «ВПЕРЁД/СТОП», внутри нижней части кадра.
+            brandLinks.style.bottom = Math.max(82, bottomInset + frameHeight * 0.055) + 'px';
+            const show = currentPage === 2 && video.currentTime >= 78;
+            brandLinks.classList.toggle('show', show);
+            brandLinks.setAttribute('aria-hidden', String(!show));
+        }
+        window.addEventListener('resize', updateBrandLinks);
+        video.addEventListener('loadedmetadata', updateBrandLinks);
+        video.addEventListener('seeked', updateBrandLinks);
+
+
         document.getElementById('img1').src = decode(_0x1a[0]);
         document.getElementById('img2').src = decode(_0x1a[1]);
         document.getElementById('videoSrc').src = decode(_0x1a[2]);
@@ -322,6 +333,7 @@
 
         function changePage(pageIndex) {
             currentPage = pageIndex;
+            updateBrandLinks();
             swiper.style.transform = `translateX(-${currentPage * 33.3333}%)`;
             if (currentPage === 2) {
                 video.play().then(() => { ppBadge.textContent = ' СТОП'; }).catch(() => {});
@@ -376,15 +388,12 @@
             if (!video.duration) return;
             const percent = Math.min((video.currentTime / 78) * 100, 100);
             progressFill.style.height = percent + '%';
-            const timeLeft = video.duration - video.currentTime;
-            if (timeLeft <= 3 && timeLeft > 0) {
-                brandLinks.classList.add('show');
-            }
+            updateBrandLinks();
         });
 
         video.addEventListener('ended', () => {
             ppBadge.textContent = ' ВПЕРЁД';
-            brandLinks.classList.add('show');
+            updateBrandLinks();
             progressFill.style.height = '100%';
         });
 
@@ -392,7 +401,7 @@
             if (!document.hidden && currentPage === 2) {
                 video.pause();
                 ppBadge.textContent = ' ВПЕРЁД';
-                brandLinks.classList.add('show');
+                updateBrandLinks();
             }
         });
 
