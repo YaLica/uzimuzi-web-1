@@ -189,7 +189,18 @@
     .brand-links .channel-telegram { background: #e0edf2; border-color: #c9dde5; }
     .brand-links a:hover { border-color: #879586; background: #fdfbf6; }
     .brand-links a:focus-visible { outline: 3px solid #3b624b; outline-offset: 3px; }
-    .brand-author { font: 14px Georgia, 'Times New Roman', serif; color: #293d35; text-align: center; }
+    .brand-author {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: var(--author-bottom, 0px);
+    transform: translateY(50%);
+    font: 14px Georgia, 'Times New Roman', serif;
+    color: #293d35;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+}
 
     /* ===== ВЕРТИКАЛЬНЫЙ ПРОГРЕСС-БАР ===== */
     .progress-vertical { position: absolute; top: 0; left: 0; width: 6px; height: 100%; background: rgba(255,255,255,0.15); z-index: 9; pointer-events: none; }
@@ -315,7 +326,20 @@
             const frameHeight = Math.min(page.clientHeight, page.clientWidth / ratio);
             const bottomInset = (page.clientHeight - frameHeight) / 2;
             // Над существующей плашкой «ВПЕРЁД/СТОП», внутри нижней части кадра.
-            brandLinks.style.bottom = Math.max(82, bottomInset + frameHeight * 0.055) + 'px';
+            const buttonsHeight = brandLinks.querySelector('.brand-channel-buttons').offsetHeight;
+
+            const buttonsBottom = Math.max(
+                bottomInset + frameHeight * 0.14 - buttonsHeight / 2,
+                page.clientHeight - ppBadge.offsetTop + 8
+            );
+
+            brandLinks.style.bottom = buttonsBottom + 'px';
+
+            const authorCenter = bottomInset + frameHeight * 0.17;
+            brandLinks.style.setProperty(
+                '--author-bottom',
+                (page.clientHeight - buttonsBottom - authorCenter) + 'px'
+            );
             const show = currentPage === 2 && video.currentTime >= 78;
             brandLinks.classList.toggle('show', show);
             brandLinks.setAttribute('aria-hidden', String(!show));
